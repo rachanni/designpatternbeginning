@@ -14,6 +14,7 @@ public class CreateSingletonClassEagerWay {
 class Jalebi{
 	
 //	Eager way of creating Singleton object
+//	object will be created during class loading
 	private static Jalebi jalebi= new Jalebi();
 	
 	public static Jalebi getJalebi() {
