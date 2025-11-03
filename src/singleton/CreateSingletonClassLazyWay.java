@@ -25,18 +25,32 @@ public class CreateSingletonClassLazyWay {
 		 */
 		
 //		We have already one instance -> samosa1 or samosa2 -> both have same reference
-		Constructor<Samosa> constructor= Samosa.class.getDeclaredConstructor();
+//		Constructor<Samosa> constructor= Samosa.class.getDeclaredConstructor();
 //		now we can even access private data member
-		constructor.setAccessible(true);
+//		constructor.setAccessible(true);
 //		java.lang.IllegalAccessException: class singleton.CreateSingletonClassLazyWay (in module designpatternbeginning) cannot access 
 //		a member of class singleton.Samosa (in module designpatternbeginning) with modifiers "private"
 //		how to bypass this exception?
 //		so that we can even access data member of Singleton class with private modifier
 //		We just need to set flag true for constructor.setAccessible(true)
-		Samosa newInstance = constructor.newInstance();
-		System.out.println("hashCode of samosa1: " + samosa1.hashCode());
-		System.out.println("hashCode of instance created using Reflection API: " + newInstance.hashCode());
-		System.out.println("comparing hashCode of instance created by using Reflection API with samosa1 hashCode: " + (samosa1.hashCode() == newInstance.hashCode()));
+//		Samosa newInstance = constructor.newInstance();
+//		System.out.println("hashCode of samosa1: " + samosa1.hashCode());
+//		System.out.println("hashCode of instance created using Reflection API: " + newInstance.hashCode());
+//		System.out.println("comparing hashCode of instance created by using Reflection API with samosa1 hashCode: " + (samosa1.hashCode() == newInstance.hashCode()));
+		
+		
+		
+		
+		
+		
+		
+		
+//		testing enum Singleton pattern
+		
+		Poha poha1 = Poha.INSTANCE;
+		Poha poha2 = Poha.INSTANCE;
+		
+		System.out.println("comparing reference of poha1 and poha2: "+ (poha1 == poha2));
 	}
 	
 }
@@ -91,35 +105,73 @@ class Samosa{
 //	synchronized block
 	
 	public static Samosa getSamosa() {
-		
-		
+//		
+//		
 		if(samosa == null) {  // // ① First check (unsynchronized)
-			// this line or before this line can be executed concurrently by multiple threads
+//			// this line or before this line can be executed concurrently by multiple threads
 			synchronized (Samosa.class) {
-				
+//				
 				if(samosa == null) {   // ② Second check (synchronized)
-					
+//					
 				samosa = new Samosa();
-				
+//				
 				}
 			}
-			
-//			this line or after this line can be executed concurrently by multiple threads
-			
+//			
+////			this line or after this line can be executed concurrently by multiple threads
+//			
 		}
-		
+//		
 		return samosa;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
+
+
+
+//using enum to provide safety against Reflection API attack
+
+ enum Poha{
+	
+	INSTANCE;  // single element -> the one and only instance
+	 
+	 public void taste() {
+		 
+		 System.out.println("WOW! Yummy Poha!");
+	 }
+	 
+	 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
