@@ -1,9 +1,11 @@
 package singleton;
 
+import java.lang.reflect.Constructor;
+
 public class CreateSingletonClassLazyWay {
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		
 		Samosa samosa1 = Samosa.getSamosa();
 		System.out.println(samosa1.hashCode());
@@ -12,6 +14,29 @@ public class CreateSingletonClassLazyWay {
 		System.out.println(samosa2.hashCode());
 		
 		System.out.println("comparing hashCode of samosa1 instance and samosa2 instance: "+ (samosa1 == samosa2));
+		
+		/*
+		 * can we break even thread safe singleton object? 
+		 * Yes! By using Reflection API
+		 * How can we prevent breaking Singleton pattern even by using Reflection API?
+		 * Solution 1 -> if object is already created then throw exception from inside constructor
+		 * Solution 2 -> use Enum
+		 * 
+		 */
+		
+//		We have already one instance -> samosa1 or samosa2 -> both have same reference
+		Constructor<Samosa> constructor= Samosa.class.getDeclaredConstructor();
+//		now we can even access private data member
+		constructor.setAccessible(true);
+//		java.lang.IllegalAccessException: class singleton.CreateSingletonClassLazyWay (in module designpatternbeginning) cannot access 
+//		a member of class singleton.Samosa (in module designpatternbeginning) with modifiers "private"
+//		how to bypass this exception?
+//		so that we can even access data member of Singleton class with private modifier
+//		We just need to set flag true for constructor.setAccessible(true)
+		Samosa newInstance = constructor.newInstance();
+		System.out.println("hashCode of samosa1: " + samosa1.hashCode());
+		System.out.println("hashCode of instance created using Reflection API: " + newInstance.hashCode());
+		System.out.println("comparing hashCode of instance created by using Reflection API with samosa1 hashCode: " + (samosa1.hashCode() == newInstance.hashCode()));
 	}
 	
 }
@@ -25,6 +50,12 @@ class Samosa{
 	private static volatile Samosa samosa;
 	
 	private Samosa() {
+		
+//		preventing to break Singleton pattern even by using Reflection API
+		
+		if(samosa != null) {
+			throw new RuntimeException("You are trying to break Singleton pattern!");
+		}
 		
 	}
 	
