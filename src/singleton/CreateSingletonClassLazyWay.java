@@ -1,5 +1,10 @@
 package singleton;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
 
 public class CreateSingletonClassLazyWay {
@@ -22,6 +27,8 @@ public class CreateSingletonClassLazyWay {
 		 * Solution 1 -> if object is already created then throw exception from inside constructor
 		 * Solution 2 -> use Enum
 		 * 
+		 * Also Serialization / Deserialization can break the Singleton Pattern.
+		 * Solution - define readResolve() method  
 		 */
 		
 //		We have already one instance -> samosa1 or samosa2 -> both have same reference
@@ -47,15 +54,33 @@ public class CreateSingletonClassLazyWay {
 		
 //		testing enum Singleton pattern
 		
-		Poha poha1 = Poha.INSTANCE;
-		Poha poha2 = Poha.INSTANCE;
+//		Poha poha1 = Poha.INSTANCE;
+//		Poha poha2 = Poha.INSTANCE;
 		
-		System.out.println("comparing reference of poha1 and poha2: "+ (poha1 == poha2));
+//		System.out.println("comparing reference of poha1 and poha2: "+ (poha1 == poha2));
+		
+		
+//		Breaking Singleton Pattern using Serialization / Deserialization
+		
+//		serializing the object -> samosa1
+		ObjectOutputStream objectOutputStream= new ObjectOutputStream(new FileOutputStream("abc.ob"));
+//		java.io.NotSerializableException: singleton.Samosa -> why?
+//		because Singleton.Samosa has not implemented Serializable interface
+//		We are serializing Samosa so Samosa must implements Serializable interface
+		objectOutputStream.writeObject(samosa1);
+		
+//		deserialization -> file to object
+		ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("abc.ob"));
+		Samosa deserializeSamosa = (Samosa)objectInputStream.readObject();
+		
+		System.out.println("hashCode of samosa1 -> seraliazed object: " + samosa1.hashCode());
+		System.out.println("hashCode of object after deserialization: " + deserializeSamosa.hashCode());
+		System.out.println("comparing hashCode of object before seralization and hashCode of object recived after deserialization: " + (samosa1.hashCode() == deserializeSamosa.hashCode()));
 	}
 	
 }
 
-class Samosa{
+class Samosa implements Serializable{
 	
 //	order of modifier does not matter -> but there is standard way recomended for readibility
 //	private volatile static  Samosa samosa;
@@ -67,9 +92,9 @@ class Samosa{
 		
 //		preventing to break Singleton pattern even by using Reflection API
 		
-		if(samosa != null) {
-			throw new RuntimeException("You are trying to break Singleton pattern!");
-		}
+//		if(samosa != null) {
+//			throw new RuntimeException("You are trying to break Singleton pattern!");
+//		}
 		
 	}
 	
@@ -122,6 +147,19 @@ class Samosa{
 //			
 		}
 //		
+		return samosa;
+	}
+	
+//	define readResolve() method so that Deserialization can not break the Singleton Pattern
+	
+//	@Override -> not needed
+//	The method readResolve() of type Samosa must override or implement a supertype method
+	
+	
+//	In Java, the readResolve() method is not defined in any superclass or interface — it’s a special hook used 
+//	by Java’s serialization mechanism, not a method you override in the normal sense.
+//	Just remove the @Override annotation.
+	public Object readResolve() {
 		return samosa;
 	}
 	
