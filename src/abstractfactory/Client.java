@@ -13,5 +13,11 @@ public class Client {
 //		getting "WebDeveloper" object
 		Employee webDeveloperObject = EmployeeFactory.getEmployeeObject(new WebDevFactory());
 		webDeveloperObject.name();
+		
+		
+//		get "Manager" object at run time
+		Employee managerObject = EmployeeFactory.getEmployeeObject(new ManagerFactory());
+		managerObject.name();
+		
 	}
 }
