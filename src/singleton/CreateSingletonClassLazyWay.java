@@ -76,11 +76,25 @@ public class CreateSingletonClassLazyWay {
 		System.out.println("hashCode of samosa1 -> seraliazed object: " + samosa1.hashCode());
 		System.out.println("hashCode of object after deserialization: " + deserializeSamosa.hashCode());
 		System.out.println("comparing hashCode of object before seralization and hashCode of object recived after deserialization: " + (samosa1.hashCode() == deserializeSamosa.hashCode()));
+		
+		
+//		You get this error because:
+//			clone() in java.lang.Object is declared as protected, not public.
+//			That means you can’t call clone() directly on an object unless:
+//			The class implements Cloneable, and
+//			It overrides clone() as public.
+//		samosa1.clone(); // CE: The method clone() from the type Object is not visible
+		
+		
+		Samosa cloneSamosa1 =  (Samosa)samosa1.clone();
+		System.out.println("hashCode of samosa1: "+ samosa1.hashCode());
+		System.out.println("hashCode of clone of samosa1: "+ cloneSamosa1.hashCode());
+		System.out.println("comparing hashCode of samosa1 and clone of samosa1: "+ (samosa1.hashCode() == cloneSamosa1.hashCode()));
 	}
 	
 }
 
-class Samosa implements Serializable{
+class Samosa implements Serializable, Cloneable{
 	
 //	order of modifier does not matter -> but there is standard way recomended for readibility
 //	private volatile static  Samosa samosa;
@@ -160,6 +174,17 @@ class Samosa implements Serializable{
 //	by Java’s serialization mechanism, not a method you override in the normal sense.
 //	Just remove the @Override annotation.
 	public Object readResolve() {
+		return samosa;
+	}
+	
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		
+//		This will break Singleton Pattern.
+//		return super.clone();
+		
+//		To prevent Singleton Pattern from breaking.
 		return samosa;
 	}
 	
