@@ -1,4 +1,4 @@
-package factory;
+package com.designpattern.factory;
 
 //Scenario - We have one super class "Employee" -> It can be interface or abstract class
 //           And also we have multiple sub class "AndroidDeveloper", "WebDeveloper" implementing "Employee"

@@ -1,4 +1,4 @@
-package factory;
+package com.designpattern.factory;
 
 public class EmployeeFactory {
 

@@ -1,4 +1,4 @@
-package abstractfactory;
+package com.designpattern.abstractfactory;
 
 public class EmployeeFactory {
 

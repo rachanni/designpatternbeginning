@@ -1,4 +1,4 @@
-package factory;
+package com.designpattern.factory;
 
 //child class or sub class
 public class AndroidDeveloper implements Employee{
